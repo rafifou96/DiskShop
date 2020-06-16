@@ -1,20 +1,23 @@
-const MongoClient = require('mongodb').MongoClient;
- 
-// Connection URL
-const url = 'mongodb://localhost:27017';
- 
-// Database Name
-const dbName = 'myproject';
- 
-// Use connect method to connect to the server
-MongoClient.connect(url, function(err, client) {
+const MongoClient = require("mongodb").MongoClient;
+
+const url = "mongodb://localhost:27017";
+
+const dbName = "diskshop";
+
+function connection(callback) {
+  MongoClient.connect(url, function (err, client) {
     if (err) {
-        console.log("Error", err);
-        return;
+      callback(null);
+      return;
     }
-  console.log("Connected successfully to server");
- 
-  const db = client.db(dbName);
- 
-  client.close();
-});
+  
+    const db = client.db(dbName);
+    db.collection('disks');
+
+    callback(db);
+
+    // client.close();
+  });
+}
+
+module.exports.connection = connection;
