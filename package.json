@@ -10,5 +10,8 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^14.0.13"
+  },
+  "dependencies": {
+    "mongodb": "^3.5.9"
   }
 }
