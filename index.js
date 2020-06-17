@@ -1,11 +1,20 @@
 const db = require('./db');
 
-db.connection(function (db) {
-  console.log(db);
-});
+const diskServices = require('./services/diskService');
+const diskService = require('./services/diskService');
 
-if (process.argv[2] == 'list') { 
-  console.log('list of disk');
-} else if (process.argv[2] == 'add') { 
-    console.log('add disk');
+const start = async() => {
+
+    await db.connection('mongodb://localhost:27017/diskshop');
+    console.log('start');
+
+    const disk = {
+        name: 'coucou',
+        price: 10,
+        qte: 5
+    };
+
+   await diskService.add(disk);
 }
+
+start();

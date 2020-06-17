@@ -12,6 +12,7 @@
     "@types/node": "^14.0.13"
   },
   "dependencies": {
-    "mongodb": "^3.5.9"
+    "mongoose": "^5.9.19",
+    "prompts": "^2.3.2"
   }
 }
