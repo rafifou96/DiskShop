@@ -1,10 +1,9 @@
-const DiskModel = require("../models/diskModel");
+const DiskModel = require("../db/models").DiskModel;
 
 //Add a disk
 const addDisk = async (diskToAdd) => {
   try {
-    const result = await DiskModel.create(diskToAdd);
-    return result;
+    return await DiskModel.create(diskToAdd);
   } catch (e) {
     console.log("Failed to add the disk.", e);
   }
@@ -13,46 +12,43 @@ const addDisk = async (diskToAdd) => {
 //Update a disk
 const updateDisk = async (diskToUpdate) => {
   try {
-    console.log(diskToUpdate);
-    const result = await DiskModel.findByIdAndUpdate(
+    return await DiskModel.findByIdAndUpdate(
       diskToUpdate._id,
       diskToUpdate
     );
-    return result;
   } catch (e) {
-    console.log("Failed to update this disk.");
+    console.log("Failed to update this disk.", e);
   }
 };
 
 //Get all disks
 const getAllDisk = async (query = {}, lean = false) => {
   try {
-    const results = lean
-      ? await DiskModel.find(query).lean()
-      : await DiskModel.find(query);
+    const results = await DiskModel.find(query);
+    if (lean) {
+      return results.lean();
+    }
     return results;
   } catch (e) {
-    console.log(`Cannot get all theses disk.`);
+    console.log("Cannot get all theses disk.", e);
   }
 };
 
 //Delete a disk
 const deleteDiskById = async (id) => {
   try {
-    const result = await DiskModel.findByIdAndDelete(id);
-    console.log("disk delete from the DB");
+    return await DiskModel.findByIdAndDelete(id);
   } catch (e) {
-    console.log("failed to deleted disk");
+    console.log("failed to deleted disk", e);
   }
 };
 
 //Get disk by id
 const getDiskById = async (id) => {
   try {
-    const result = await DiskModel.findOne({ _id: id });
-    return result;
+    return await DiskModel.findOne({ _id: id });
   } catch (e) {
-    console.log(`Cannot get this disk.`);
+    console.log("Cannot get this disk.", e);
   }
 };
 
