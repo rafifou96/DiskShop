@@ -1,12 +1,11 @@
-const mongooseClient = require('mongoose');
+const mongoose = require("mongoose");
 
-const diskShema = new mongooseClient.Schema({
-    id: { type: Number, required: true },
-    name: { type: String, required: true },
-    price: { type: Number, required: true },
-    qte: { type: Number, required: true },
+const Schema = mongoose.Schema;
+
+const diskShema = new Schema({
+  name: { type: String, required: true },
+  price: { type: Number, required: true },
+  quantity: { type: Number, required: true },
 });
 
-const diskModel = mongooseClient.model('DiskModel', diskShema);
-
-module.exports = diskModel;
+module.exports = mongoose.model("DiskModel", diskShema);

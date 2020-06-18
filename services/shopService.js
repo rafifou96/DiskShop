@@ -1,7 +1,6 @@
-//const diskModel = require('../models/diskModel');
-const diskService = require('./diskService');
-const prompts = require('prompts');
+const DiskService = require('./diskService');
 
+const prompts = require('prompts');
 
 const selectADisk = async (diskList) => {
 
@@ -33,7 +32,7 @@ const buyDisk = async (disk) => {
         });
 
         disk.qty -= qty.value;
-        await diskService.update(disk);
+        await DiskService.update(disk);
 
     } catch (e) {
         console.log(`Unable to buy this items`);
@@ -62,28 +61,28 @@ const runShop = async () => {
         switch (choice.value) {
             case 1:
                 const disk = await buildDisk();
-                await diskService.add(disk);
+                await DiskService.add(disk);
                 console.log(`Successful added this item.`);
                 break;
             case 2:
-                diskList = await diskService.getAll();
+                diskList = await DiskService.getAll();
                 selectedDisk = await selectADisk(diskList);
                 //const updatedDisk = await buildDisk(selectedDisk);
-                await diskService.update(updatedDisk);
+                await DiskService.update(updatedDisk);
                 console.log(`Successful updated this item.`);
                 break;
             case 3:
-                diskList = await diskService.getAll();
+                diskList = await DiskService.getAll();
                 selectedDisk = await selectADisk(diskList);
-                await diskService.delete(selectedDisk._id);
+                await DiskService.delete(selectedDisk._id);
                 console.log(`Successful deleted this item.`);
                 break;
             case 4:
-                diskList = await diskService.getAll({}, true);
+                diskList = await DiskService.getAll({}, true);
                 console.table(diskList);
                 break;
             case 5:
-                diskList = await diskService.getAll({qty: {$gt: 0}}); // all disponible list.
+                diskList = await DiskService.getAll({qty: {$gt: 0}}); // all disponible list.
                 selectedDisk = await selectADisk(diskList);
                 await buyDisk(selectedDisk);
                 console.log(`Successful buy this item.`)
