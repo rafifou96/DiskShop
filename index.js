@@ -1,7 +1,6 @@
 const db = require('./db');
 
 const diskServices = require('./services/diskService');
-const diskService = require('./services/diskService');
 
 const start = async() => {
 
@@ -14,7 +13,8 @@ const start = async() => {
         qte: 5
     };
 
-   await diskService.add(disk);
+  // await diskServices.add(disk);
+   await diskServices.delete("5eeb2d1cd059fc324cbe637c");
 }
 
 start();
