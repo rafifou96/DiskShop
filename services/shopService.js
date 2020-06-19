@@ -95,8 +95,8 @@ const runShop = async (skipDocs = false) => {
     case 2: {
       diskList = await diskService.getAll();
       selectedDisk = await selectADisk(diskList);
-      const updatedDisk = await buildDisk(selectedDisk);
-      await diskService.update(updatedDisk);
+      //const updatedDisk = await buildDisk(selectedDisk);
+      await diskService.update(selectedDisk);
       console.log(`Successful updated this item.`);
       break;
     }
@@ -129,7 +129,7 @@ const runShop = async (skipDocs = false) => {
       runShop(true);
       return;
   }
-
+  
   runShop();
 };
 
