@@ -1,7 +1,7 @@
 const DiskModel = require("../db/models").DiskModel;
 
 //Add a disk
-const addDisk = async (diskToAdd) => {
+const add = async (diskToAdd) => {
   try {
     return await DiskModel.create(diskToAdd);
   } catch (e) {
@@ -10,7 +10,7 @@ const addDisk = async (diskToAdd) => {
 };
 
 //Update a disk
-const updateDisk = async (diskToUpdate) => {
+const update = async (diskToUpdate) => {
   try {
     return await DiskModel.findByIdAndUpdate(
       diskToUpdate._id,
@@ -22,20 +22,16 @@ const updateDisk = async (diskToUpdate) => {
 };
 
 //Get all disks
-const getAllDisk = async (query = {}, lean = false) => {
+const getAll = async (query = {}) => {
   try {
-    const results = await DiskModel.find(query);
-    if (lean) {
-      return results.lean();
-    }
-    return results;
+    return await DiskModel.find(query);
   } catch (e) {
     console.log("Cannot get all theses disk.", e);
   }
 };
 
 //Delete a disk
-const deleteDiskById = async (id) => {
+const deleteById = async (id) => {
   try {
     return await DiskModel.findByIdAndDelete(id);
   } catch (e) {
@@ -44,7 +40,7 @@ const deleteDiskById = async (id) => {
 };
 
 //Get disk by id
-const getDiskById = async (id) => {
+const getById = async (id) => {
   try {
     return await DiskModel.findOne({ _id: id });
   } catch (e) {
@@ -53,9 +49,9 @@ const getDiskById = async (id) => {
 };
 
 module.exports = {
-  add: addDisk,
-  update: updateDisk,
-  getAll: getAllDisk,
-  delete: deleteDiskById,
-  getDisk: getDiskById,
+  add,
+  update,
+  getAll,
+  deleteById,
+  getById,
 };

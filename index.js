@@ -13,7 +13,7 @@ const start = async () => {
     process.exit(1);
   }
 
-  await shopService.run(db);
+  shopService.run(db);
 };
 
 start();

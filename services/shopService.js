@@ -4,28 +4,31 @@ const diskService = require("./diskService");
 
 let db;
 
-const buildDisk = async () =>
+const buildDisk = async (initial) =>
   await prompts([
     {
       type: "text",
       name: "title",
       message: "Title ?",
+      initial: initial ? initial.title : ''
     },
     {
       type: "number",
       name: "price",
       message: "Price ?",
+      initial: initial ? initial.price : ''
     },
     {
       type: "number",
       name: "quantity",
       message: "Quantity ?",
+      initial: initial ? initial.quantity : ''
     },
   ]);
 
-const selectADisk = async (diskList) => {
-  const list = await diskList.map((disc, index) => {
-    return { Name: disc.title };
+const selectADisk = async (diskList, showPrice = false) => {
+  const list = diskList.map(disk => {
+    return showPrice ? { title: disk.title, price: disk.price } : { title: disk.title }
   });
 
   console.log("Select a disk number in the list");
@@ -42,16 +45,16 @@ const selectADisk = async (diskList) => {
 };
 
 const buyDisk = async (disk) => {
+  console.log(disk)
   try {
-    console.log(`Remain ${disk.qty} for ${disk.title}`);
-    const qty = await prompts({
+    console.log(`Remain ${disk.quantity} disks of ${disk.title}`);
+    const quantity = await prompts({
       type: "number",
-      title: "value",
-      message: "Select a qty ?",
-      validate: (value) => (disk.qty - value < 0 ? `Not enough qty` : true),
+      name: "value",
+      message: "Select a quantity ?",
+      validate: (value) => (disk.quantity - value < 0 ? `Not enough quantity` : true),
     });
-
-    disk.qty -= qty.value;
+    disk.quantity -= quantity.value;
     await diskService.update(disk);
   } catch (e) {
     console.log(`Unable to buy this items`);
@@ -95,7 +98,10 @@ const runShop = async (skipDocs = false) => {
     case 2: {
       diskList = await diskService.getAll();
       selectedDisk = await selectADisk(diskList);
-      //const updatedDisk = await buildDisk(selectedDisk);
+      const updatedDisk = await buildDisk(selectedDisk);
+      selectedDisk.title = updatedDisk.title;
+      selectedDisk.price = updatedDisk.price;
+      selectedDisk.quantity = updatedDisk.quantity;
       await diskService.update(selectedDisk);
       console.log(`Successful updated this item.`);
       break;
@@ -103,18 +109,25 @@ const runShop = async (skipDocs = false) => {
     case 3: {
       diskList = await diskService.getAll();
       selectedDisk = await selectADisk(diskList);
-      await diskService.delete(selectedDisk._id);
+      await diskService.deleteById(selectedDisk._id);
       console.log(`Successful deleted this item.`);
       break;
     }
     case 4: {
-      diskList = await diskService.getAll({}, true);
-      console.table(diskList);
+      diskList = await diskService.getAll();
+      const diskListSummary = diskList.map(disk => {
+        return { 
+          title: disk.title,
+          price: disk.price,
+          quantity: disk.quantity
+        }
+      });
+      console.table(diskListSummary);
       break;
     }
     case 5: {
-      diskList = await diskService.getAll({ qty: { $gt: 0 } }); // all disponible list.
-      selectedDisk = await selectADisk(diskList);
+      diskList = await diskService.getAll({ quantity: { $gt: 0 } }); // all disponible list.
+      selectedDisk = await selectADisk(diskList, true);
       await buyDisk(selectedDisk);
       console.log(`Successful buy this item.`);
       break;
