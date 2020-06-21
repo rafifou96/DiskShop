@@ -4,6 +4,7 @@ const diskService = require("./diskService");
 
 let db;
 
+//I build my disk by receive informations from the console by using the package "Prompts"
 const buildDisk = async (initial) =>
   await prompts([
     {
@@ -26,6 +27,8 @@ const buildDisk = async (initial) =>
     },
   ]);
 
+  //Create a function that select a disk in from my DataBase
+  //It show me the disks and i can select one of them (by index)
 const selectADisk = async (diskList, showPrice = false) => {
   const list = diskList.map(disk => {
     return showPrice ? { title: disk.title, price: disk.price } : { title: disk.title }
@@ -44,8 +47,10 @@ const selectADisk = async (diskList, showPrice = false) => {
   return diskList[diskIndex.value];
 };
 
+//Fonction that permit to buy a disk
+//Show how many of selected disk remain 
+//If remain enougth of disks I can buy them
 const buyDisk = async (disk) => {
-  console.log(disk)
   try {
     console.log(`Remain ${disk.quantity} disks of ${disk.title}`);
     const quantity = await prompts({
@@ -61,6 +66,7 @@ const buyDisk = async (disk) => {
   }
 };
 
+//Show the many options of my main 
 const showDocs = () =>
   console.log(`
 ***************************
@@ -75,6 +81,10 @@ Welcome to 108 disk shop !!
 ***************************
 `);
 
+//Main()
+//At first we run the shop and receive a choice 
+//We switch the choice and apply the adaptive function 
+//At least we run the main too 
 const runShop = async (skipDocs = false) => {
   let diskList = 0;
   let selectedDisk = null;
@@ -82,8 +92,8 @@ const runShop = async (skipDocs = false) => {
   if (!skipDocs) {
       showDocs();
   }
-
-  const choice = await prompts({
+  //Receive the choice 
+  const choice = await prompts({ 
     type: "number",
     name: "value",
     message: "Make a choice ?",
